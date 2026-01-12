@@ -15,7 +15,7 @@ app.use(Antd)
 app.mount('#app')
 
 router.beforeEach((to, from, next) => {
-  const mainTitle = 'IoT Molding'
+  const mainTitle = 'IoT Assembly'
   const pageTitle =
     typeof to.meta.breadcrumb === 'string' ? to.meta.breadcrumb : to.name
   document.title = `${pageTitle} - ${mainTitle}`

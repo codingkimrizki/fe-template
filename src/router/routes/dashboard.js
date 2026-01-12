@@ -13,15 +13,16 @@ export default [
     children: [
       {
         path: '/',
-        name: 'Machine Dashboard',
-        component: () => import('@/views/dashboard/machine/MainDashboard.vue'),
+        name: 'Live Monitoring Dashboard',
+        // component: () => import('@/views/dashboard/machine/MainDashboard.vue'),
+        component: () => import('@/views/dashboard/machine/DashboardExp.vue'),
         meta: {
           // requiresAuth: true,
           requiresAuth: false,
           roles: ['admin', 'staff', 'user'],
-          breadcrumb: 'Machine',
+          breadcrumb: 'Live Monitoring',
           showInMenu: true,
-          title: 'Machine',
+          title: 'Live Monitoring',
         },
       },
       {
