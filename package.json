@@ -1,0 +1,50 @@
+{
+  "name": "fe-iot-molding",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode development --host",
+    "build": "vite build --mode production",
+    "preview": "vite preview --host",
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@google-translate-select/vue3": "^0.1.8",
+    "@vueuse/core": "^14.1.0",
+    "ant-design-vue": "^4.2.5",
+    "axios": "^1.7.7",
+    "html2pdf.js": "^0.12.1",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
+    "lucide-vue-next": "^0.546.0",
+    "nprogress": "^0.2.0",
+    "paho-mqtt": "^1.1.0",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
+    "qrcode.vue": "^3.6.0",
+    "vue": "^3.5.11",
+    "vue-echarts": "^7.0.3",
+    "vue-router": "^4.4.5"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.12.0",
+    "@vitejs/plugin-vue": "^5.1.4",
+    "@vue/eslint-config-prettier": "^10.0.0",
+    "eslint": "^9.12.0",
+    "eslint-plugin-vue": "^9.28.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.3.3",
+    "vite": "^5.4.8",
+    "vite-plugin-vue-devtools": "^7.7.7"
+  }
+}

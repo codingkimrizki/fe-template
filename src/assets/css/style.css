@@ -1,0 +1,309 @@
+body {
+  background-color: var(--content-bg);
+  color: var(--text-color);
+}
+
+.dark .sider.ant-layout-sider,
+.dark .ant-menu.ant-menu-dark,
+.dark .ant-menu-submenu,
+.dark .ant-menu-submenu-popup,
+.dark .ant-menu-sub {
+  background: var(--content-bg) !important;
+  color: var(--text-color) !important;
+}
+
+:root {
+  --header-bg: #ffffff;
+  --text-color: #000000;
+  --content-bg: #ffffff;
+  --card-bg-transparent: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.15);
+  --card-shadow-hover: rgba(0, 0, 0, 0.25);
+}
+
+.dark {
+  --header-bg: #141414;
+  --text-color: rgba(255, 255, 255, 0.85);
+  --content-bg: #141414;
+  --card-bg-transparent: #272727;
+  --card-shadow: rgba(255, 255, 255, 0.08);
+  --card-shadow-hover: rgba(255, 255, 255, 0.18);
+}
+
+.ant-card {
+  background: var(--card-bg-transparent) !important;
+  border: none !important;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 2px 8px var(--card-shadow),
+    0 4px 16px var(--card-shadow);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+.ant-card-hoverable {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.ant-card-hoverable::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 3px solid transparent;
+  background: linear-gradient(360deg, var(--primary-color), transparent)
+    border-box;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ant-card-hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(var(--primary-color-rgb), 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ant-card-hoverable:hover::before {
+  opacity: 1;
+}
+
+.ant-tag:hover {
+  transform: scale(1.05); /* sedikit membesar */
+  transition: transform 0.2s ease; /* durasi dan animasi smooth */
+  cursor: pointer;
+}
+
+/* Scrollbar untuk ant-table-body dan ant-drawer-body */
+.ant-table-body::-webkit-scrollbar,
+.ant-drawer-body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ant-table-body::-webkit-scrollbar-track,
+.ant-drawer-body::-webkit-scrollbar-track {
+  background: var(--card-bg-transparent);
+  border-radius: 8px;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb,
+.ant-drawer-body::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 8px;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb:hover,
+.ant-drawer-body::-webkit-scrollbar-thumb:hover {
+  background-color: gray;
+}
+
+.ant-input-number {
+  width: 100%;
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.8s;
+}
+
+.bounce-leave-active {
+  animation: bounce-out 0.5s;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.zoom-enter-active,
+.zoom-leave-active {
+  transition:
+    transform 0.5s ease-out,
+    opacity 0.5s ease;
+}
+
+.zoom-enter-from {
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+.zoom-leave-to {
+  transform: scale(1.01);
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.run {
+  background-color: #2eb85c;
+  color: white;
+}
+
+.stop {
+  background-color: #f56c6c;
+  color: white;
+}
+
+.stop-icon {
+  color: #f56c6c;
+}
+
+.large {
+  font-size: large;
+}
+
+.medium {
+  font-size: medium;
+}
+
+.small {
+  font-size: small;
+}
+
+.blue {
+  background-color: #789dbc;
+}
+
+.x-large {
+  font-size: x-large;
+}
+
+.mb-small {
+  margin-bottom: 0.5rem;
+}
+
+.mb-large {
+  margin-bottom: 1rem;
+}
+
+.mt-small {
+  margin-top: 0.5rem;
+}
+
+.mt-large {
+  margin-top: 1rem;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+.secondary {
+  color: grey;
+}
+
+/* Global Ant Design Tab Styles */
+.ant-tabs-nav .ant-tabs-tab {
+  background: var(--card-bg-transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--card-shadow);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active {
+  background: var(--content-bg);
+  border-bottom-color: transparent;
+  color: var(
+    --primary-color,
+    #1890ff
+  ); /* Fallback to Ant Design default blue if not defined */
+}
+
+.ant-tabs-nav .ant-tabs-tab:hover {
+  color: var(--primary-color, #1890ff);
+}
+
+.ant-tabs-content-holder {
+  background: transparent;
+}
+
+.ellipsis-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.qr {
+  border: 5px solid #fff;
+  border-radius: 8px;
+}
+
+.blink {
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}

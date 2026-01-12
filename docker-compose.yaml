@@ -1,0 +1,20 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: riankurniawan/iot-molding-fe:latest
+    container_name: iot-molding-fe
+    restart: always
+    ports:
+      - 4173:80
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Jakarta
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
