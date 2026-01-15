@@ -24,19 +24,6 @@ export default [
           title: 'User Management',
         },
       },
-      {
-        path: '/device-manager',
-        name: 'Device Manager',
-        component: () => import('@/views/admin/device/DeviceManager.vue'),
-        meta: {
-          // requiresAuth: true,
-          requiresAuth: false,
-          roles: ['admin'],
-          breadcrumb: 'Device Manager',
-          showInMenu: true,
-          title: 'Device Manager',
-        },
-      },
     ],
   },
 ]

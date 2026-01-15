@@ -8,27 +8,11 @@
     <template #overlay>
       <a-menu class="notif-menu">
         <span class="medium mb-small bold" style="padding: 8px 10px"
-          >Maintenance</span
+          >Survey Portal</span
         >
-        <a-menu-item @click="store.toggleDrawer('machine')">
+        <a-menu-item @click="router.push({ name: 'survey-form' })">
           <a-flex justify="space-between">
-            <span>Machine</span>
-            <a-badge :count="store.machine.length" />
-          </a-flex>
-        </a-menu-item>
-        <a-menu-item @click="store.toggleDrawer('kanagata')">
-          <a-flex justify="space-between">
-            <span>Kanagata</span>
-            <a-badge :count="store.kanagata.length" />
-          </a-flex>
-        </a-menu-item>
-        <span class="medium mb-small bold" style="padding: 8px 10px"
-          >Renewal Reminder</span
-        >
-        <a-menu-item @click="store.toggleDrawer('renewal')">
-          <a-flex justify="space-between">
-            <span>Kanagata</span>
-            <a-badge :count="store.renewalReminder.length" />
+            <span>Form</span>
           </a-flex>
         </a-menu-item>
       </a-menu>
@@ -39,6 +23,9 @@
 <script setup>
 import { MailOutlined } from '@ant-design/icons-vue'
 import { useMaintenanceNotifyStore } from '@/stores/maintenanceNotify'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const store = useMaintenanceNotifyStore()
 </script>

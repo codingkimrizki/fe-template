@@ -15,13 +15,6 @@
       description="Granted all access to content and page"
     />
     <BaseWidget
-      title="Staff Role"
-      :value="userStore.userStat?.staff"
-      :icon="UserSwitchOutlined"
-      suffix="Users"
-      description="Granted access for read, update, add content"
-    />
-    <BaseWidget
       title="User Role"
       :value="userStore.userStat?.user"
       :icon="UserOutlined"
@@ -38,7 +31,6 @@ import {
   TeamOutlined,
   UserOutlined,
   CrownOutlined,
-  UserSwitchOutlined,
 } from '@ant-design/icons-vue'
 
 const userStore = useUserStore()

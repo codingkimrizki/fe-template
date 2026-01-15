@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TheLayout from '@/layout/TheLayout.vue'
 import adminRoutes from '@/router/routes/admin'
 import authRoutes from '@/router/routes/auth'
-import dashboardRoutes from '@/router/routes/dashboard'
+// import dashboardRoutes from '@/router/routes/dashboard'
 import masterDataRoutes from '@/router/routes/master'
 import { authGuard } from './middleware/authGuard'
 import NProgress from 'nprogress'
@@ -16,7 +16,7 @@ const routes = [
     redirect: { name: 'Machine Dashboard' },
     meta: { breadcrumb: 'Home' },
     children: [
-      ...dashboardRoutes,
+      // ...dashboardRoutes,
       ...masterDataRoutes,
       ...adminRoutes,
       {

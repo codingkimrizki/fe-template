@@ -9,8 +9,8 @@
     >
       <a-image :src="hrs" :width="100" :preview="false" />
       <h2 :class="{ 'logo-name': true, 'intro-active': isActive }">
-        ASSEMBLY<br />
-        IOT PORTAL
+        Responsible Business Alliance<br />
+        Ethic Portal
       </h2>
     </a-flex>
     <a-typography-text

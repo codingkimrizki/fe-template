@@ -14,8 +14,7 @@ export default [
       {
         path: '/',
         name: 'Live Monitoring Dashboard',
-        // component: () => import('@/views/dashboard/machine/MainDashboard.vue'),
-        component: () => import('@/views/dashboard/machine/DashboardExp.vue'),
+        component: () => import('@/views/dashboard/machine/MainDashboard.vue'),
         meta: {
           // requiresAuth: true,
           requiresAuth: false,

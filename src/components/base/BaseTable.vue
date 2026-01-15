@@ -13,9 +13,6 @@
       </a-input>
       <a-space size="small" align="end">
         <slot name="additional" />
-        <a-button type="primary" v-show="addAction" @click="emits('add')">
-          <PlusCircleOutlined /> Add
-        </a-button>
       </a-space>
     </a-flex>
 
@@ -51,7 +48,7 @@
 <script setup>
 import { formatDateTime } from '@/utils/formatDateTime'
 import { formatThousandSeparator } from '@/utils/formatterInputNumber'
-import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
+import { SearchOutlined } from '@ant-design/icons-vue'
 import dayjs from 'dayjs'
 // Props
 defineProps({

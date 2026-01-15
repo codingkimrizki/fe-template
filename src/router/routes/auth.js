@@ -19,4 +19,9 @@ export default [
     name: 'Recovery Password',
     component: () => import('@/views/pages/RecoveryPassword.vue'),
   },
+  {
+    path: '/survey-form',
+    name: 'survey-form',
+    component: () => import('@/components/FormSurvey.vue'),
+  },
 ]

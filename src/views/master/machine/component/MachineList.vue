@@ -10,69 +10,18 @@
     :loading="loading"
     :scroll="{ y: 'calc(100vh - 450px)', x: 'max-content' }"
     @change="onTableChange"
-    @add="handleAction('add')"
   >
-    <template #additional>
-      <a-checkbox v-model:checked="machineStore.filter.showDeleted"
-        >Show Deleted</a-checkbox
-      >
-    </template>
     <template #brand="{ text }">
       <span class="bold">{{ text }}</span>
     </template>
-    <template #action="{ record }">
-      <a-space size="small">
-        <a-popconfirm
-          @confirm="handleRestore(record.id)"
-          title="Are you sure restore this machine ?"
-        >
-          <a-button size="small" v-show="record.deletedAt">Restore</a-button>
-        </a-popconfirm>
-        <a-button
-          size="small"
-          v-show="!record.deletedAt"
-          type="primary"
-          @click="handleAction('update', record)"
-        >
-          Update
-        </a-button>
-        <a-button
-          v-show="!record.deletedAt"
-          type="primary"
-          danger
-          size="small"
-          @click="handleAction('delete', record)"
-        >
-          Delete
-        </a-button>
-      </a-space>
-    </template>
   </BaseTable>
-  <Teleport to="body">
-    <BaseModal
-      :visible="modal.visible"
-      @close="handleClose"
-      :modalTitle="modal.title"
-    >
-      <template #body>
-        <MachineForm
-          :data="modal.data"
-          :mode="modal.mode"
-          @close="handleClose"
-        />
-      </template>
-    </BaseModal>
-  </Teleport>
 </template>
 
 <script setup>
-import BaseModal from '@/components/base/BaseModal.vue'
 import BaseTable from '@/components/base/BaseTable.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { debounce } from 'lodash-es'
-import MachineForm from './MachineForm.vue'
 import { useMachineStore } from '@/stores/machine'
-import { capitalizeEachWord } from '@/utils/capitalizeEachWord'
 
 const machineStore = useMachineStore()
 const loading = ref(false)
@@ -84,13 +33,6 @@ const pagination = computed(() => ({
   pageSizeOptions: ['10', '20', '50'],
 }))
 
-const modal = ref({
-  visible: false,
-  title: '',
-  data: null,
-  mode: '',
-})
-
 const baseColumns = [
   {
     title: 'No',
@@ -101,129 +43,46 @@ const baseColumns = [
     sorter: true,
   },
   {
-    title: 'Brand',
+    title: 'Device IP Address',
     dataIndex: 'brand',
     key: 'brand',
     ellipsis: true,
     sorter: true,
+    width: 200,
   },
   {
-    title: 'Tonnage',
+    title: 'Date',
+    dataIndex: 'brand',
+    key: 'brand',
+    ellipsis: true,
+    sorter: true,
+    width: 150,
+  },
+  {
+    title: 'Time',
     dataIndex: 'tonnage',
     key: 'tonnage',
     sorter: true,
-    width: 100,
+    width: 150,
   },
   {
-    title: 'Machine Stats',
-    children: [
-      {
-        title: 'Injection',
-        children: [
-          {
-            title: 'Shot',
-            dataIndex: 'injectionShot',
-            key: 'injectionShot',
-            ellipsis: true,
-            sorter: true,
-            width: 120,
-          },
-          {
-            title: 'Target',
-            dataIndex: 'targetInjection',
-            key: 'targetInjection',
-            ellipsis: true,
-            sorter: true,
-            width: 120,
-          },
-          {
-            title: 'Tolerance',
-            dataIndex: 'toleranceInjection',
-            key: 'toleranceInjection',
-            ellipsis: true,
-            sorter: true,
-            width: 120,
-          },
-        ],
-      },
-      {
-        title: 'Zclean',
-        children: [
-          {
-            title: 'Shot',
-            dataIndex: 'zcleanShot',
-            key: 'zcleanShot',
-            ellipsis: true,
-            sorter: true,
-            width: 120,
-          },
-          {
-            title: 'Target',
-            dataIndex: 'targetZclean',
-            key: 'targetZclean',
-            ellipsis: true,
-            sorter: true,
-            width: 120,
-          },
-          {
-            title: 'Tolerance',
-            dataIndex: 'toleranceZclean',
-            key: 'toleranceZclean',
-            ellipsis: true,
-            sorter: true,
-            width: 120,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: 'Last Updated',
+    title: 'Status',
     dataIndex: 'updatedAt',
     key: 'updatedAt',
     ellipsis: true,
     sorter: true,
     width: 150,
   },
-  {
-    title: 'Action',
-    dataIndex: 'action',
-    width: 100,
-  },
 ]
-
-const deletedColumn = {
-  title: 'Deleted At',
-  dataIndex: 'deletedAt',
-  key: 'deletedAt',
-  ellipsis: true,
-  width: '5%',
-}
 
 const columns = computed(() => {
   const cols = [...baseColumns]
   if (machineStore.filter.showDeleted) {
     const actionIndex = cols.findIndex(col => col.key === 'action')
-    cols.splice(actionIndex, 0, deletedColumn)
+    cols.splice(actionIndex, 0)
   }
   return cols
 })
-
-const handleAction = (mode, data = {}) => {
-  modal.value.visible = !modal.value.visible
-  modal.value.title = `${capitalizeEachWord(mode)} Data`
-  modal.value.data = data
-  modal.value.mode = mode
-}
-
-const handleClose = () => {
-  modal.value.visible = false
-  modal.value.mode = null
-}
-
-const handleRestore = async id => {
-  await machineStore.restore(id)
-}
 
 const onTableChange = async ({ pagination: pag, sorter }) => {
   machineStore.filter.sortBy = sorter.field

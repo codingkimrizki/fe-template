@@ -16,14 +16,15 @@
           :theme="siderTheme"
           mode="inline"
           style="border-inline-end: 0px"
-          v-if="authStore.isAuthenticated"
+          v-if="DEV_MODE || authStore.isAuthenticated"
           v-model:selectedKeys="selectedKeys"
           v-model:openKeys="openKeys"
         >
           <template v-for="item in menuItems">
             <a-menu-item
               v-if="
-                !item.children && item.role.includes(authStore.user.roleName)
+                !item.children &&
+                (DEV_MODE || item.role.includes(authStore.user.roleName))
               "
               :key="item.key"
               :to="item.path"
@@ -41,7 +42,7 @@
             <template v-else>
               <a-sub-menu
                 :key="item.key"
-                v-if="item.role.includes(authStore.user.roleName)"
+                v-if="DEV_MODE || item.role.includes(authStore.user.roleName)"
               >
                 <template #title>
                   <component :is="item.icon" />
@@ -88,6 +89,9 @@ import { useAuthStore } from '@/stores/auth.js'
 import { useThemeStore } from '@/stores/theme.js'
 import { useDynamicMenu } from '@/composable/useDynamicMenu'
 import hrs from '@/assets/images/hrs.png'
+
+//untuk mode develop, kalau prod nanti false
+const DEV_MODE = true
 
 // Menerjemahkan nama icon dari string ke komponen icon
 const iconMap = {
