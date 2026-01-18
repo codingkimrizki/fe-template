@@ -16,8 +16,8 @@ export default [
         name: 'User Management',
         component: () => import('@/views/admin/user/UserManagement.vue'),
         meta: {
-          // requiresAuth: true,
-          requiresAuth: false,
+          requiresAuth: true,
+          // requiresAuth: false,
           roles: ['admin'],
           breadcrumb: 'User Management',
           showInMenu: true,

@@ -25,14 +25,22 @@ export const useAuthStore = defineStore('auth', {
     // 🔑 Login user
     async login(email, password) {
       try {
-        const { data, status } = await api.post('/auth/login', {
+        const { data, status } = await api.post('/users/login', {
           email,
           password,
         })
 
         if (status === 200) {
-          this.user = data.user
+          // this.user = data.user
+          this.user = {
+            id: data.user.id,
+            email: data.user.email,
+            role: data.user.role, // <- penting
+          }
           this.isAuthenticated = true
+          console.log('authStore.user.role:', this.user.role)
+          console.log('typeof role:', typeof this.user.role)
+
           this.accessToken = data?.accessToken
           notification.success({
             message: 'Login Success',
@@ -127,7 +135,7 @@ export const useAuthStore = defineStore('auth', {
           })
         }
       } catch (error) {
-        if (error.response.status === 409) {
+        if (error.response?.status === 409) {
           notification.error({
             message: `Registration Failed`,
             description: error.response.data.message,

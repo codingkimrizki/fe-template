@@ -8,7 +8,7 @@ export default [
       showInMenu: true,
       title: 'Dashboard',
       icon: 'DatabaseOutlined',
-      roles: ['admin', 'staff'],
+      roles: ['admin', 'user'],
     },
     children: [
       {
@@ -17,7 +17,7 @@ export default [
         component: () => import('@/views/master/machine/MasterMachine.vue'),
         meta: {
           requiresAuth: false,
-          roles: ['admin', 'staff'],
+          roles: ['admin', 'user'],
           breadcrumb: 'Result',
           showInMenu: true,
           title: 'Result',

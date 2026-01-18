@@ -24,7 +24,7 @@
             <a-menu-item
               v-if="
                 !item.children &&
-                (DEV_MODE || item.role.includes(authStore.user.roleName))
+                (DEV_MODE || item.role.includes(authStore.user.role))
               "
               :key="item.key"
               :to="item.path"
@@ -42,7 +42,7 @@
             <template v-else>
               <a-sub-menu
                 :key="item.key"
-                v-if="DEV_MODE || item.role.includes(authStore.user.roleName)"
+                v-if="DEV_MODE || item.role.includes(authStore.user.role)"
               >
                 <template #title>
                   <component :is="item.icon" />
@@ -91,7 +91,7 @@ import { useDynamicMenu } from '@/composable/useDynamicMenu'
 import hrs from '@/assets/images/hrs.png'
 
 //untuk mode develop, kalau prod nanti false
-const DEV_MODE = true
+const DEV_MODE = false
 
 // Menerjemahkan nama icon dari string ke komponen icon
 const iconMap = {
@@ -118,6 +118,9 @@ const route = useRoute()
 
 // Watch for changes in the menu and update if routes change
 watchEffect(() => {
+  console.log('menus.value:', menus.value)
+  console.log('user.role:', authStore.user.role)
+
   if (menus.value && menus.value.length > 0) {
     menuItems.value = menus.value.map(item => ({
       ...item,
@@ -188,6 +191,10 @@ const handleResize = () => {
 }
 
 onMounted(() => {
+  console.log('authStore.user:', authStore.user)
+  console.log('authStore.isAuthenticated:', authStore.isAuthenticated)
+  console.log('user.role:', authStore.user.role)
+
   handleResize()
   window.addEventListener('resize', handleResize)
 })
