@@ -1,112 +1,102 @@
 <template>
-  <div class="min-h-screen bg-[#f6f8fb] px-4 py-6 flex justify-center">
-    <div class="w-full max-w-4xl space-y-8">
-      <!-- CARD PER APP -->
-      <a-card
-        v-for="app in props.selectedApps"
-        :key="app"
-        class="rounded-2xl shadow-md border-0"
-        :body-style="{ padding: isMobile ? '16px' : '24px' }"
+  <a-flex justify="center" align="center" class="forgot-container">
+    <a-card hoverable class="forgot-card" :bordered="false">
+      <a-flex justify="flex-end" wrap="wrap" style="margin-bottom: 1rem">
+        <ThemeToggle />
+      </a-flex>
+      <LogoTitleApp sub-title="Recover your account" />
+      <a-form
+        :model="form"
+        @finish="recoverAccount"
+        layout="vertical"
+        :rules="rules"
       >
-        <!-- HEADER -->
-        <div class="mb-6">
-          <a-tag color="blue" class="mb-2">
-            {{ pageName }}
-          </a-tag>
-
-          <a-typography-title
-            :level="isMobile ? 4 : 3"
-            class="!mb-1 capitalize"
-          >
-            {{ appName(app) }}
-          </a-typography-title>
-
-          <a-typography-text type="secondary">
-            Please answer honestly based on your experience
-          </a-typography-text>
-        </div>
-
-        <!-- QUESTIONS -->
-        <a-space direction="vertical" size="large" class="w-full">
-          <a-card
-            v-for="q in questions"
-            :key="q.id_question"
-            size="small"
-            class="rounded-xl bg-[#fafafa] border"
-          >
-            <a-form layout="vertical">
-              <a-form-item :label="q.question_text" class="mb-0">
-                <!-- YES / NO -->
-                <a-radio-group
-                  v-if="q.question_type === 'Y/N'"
-                  v-model:value="ratings[app][q.id_question]"
-                  :class="[
-                    'w-full',
-                    isMobile
-                      ? 'flex flex-col gap-2'
-                      : 'flex justify-center gap-8',
-                  ]"
-                >
-                  <a-radio value="Y">Yes</a-radio>
-                  <a-radio value="N">No</a-radio>
-                </a-radio-group>
-
-                <!-- SUGGESTION -->
-                <a-textarea
-                  v-else-if="q.question_type === 'suggest'"
-                  v-model:value="ratings[app][q.id_question]"
-                  :rows="isMobile ? 3 : 2"
-                  placeholder="Write your suggestion..."
-                />
-              </a-form-item>
-            </a-form>
-          </a-card>
-        </a-space>
-      </a-card>
-
-      <!-- NAVIGATION -->
-      <a-card
-        class="rounded-2xl border-0 shadow-sm"
-        :body-style="{ padding: isMobile ? '12px' : '20px' }"
-      >
-        <div
-          :class="[
-            'flex gap-3',
-            isMobile ? 'flex-col' : 'flex-row justify-between',
-          ]"
-        >
-          <a-button block type="default" @click="props.prevStep">
-            ← Back
-          </a-button>
-
+        <a-form-item label="Email" name="email">
+          <a-input
+            v-model:value="form.email"
+            placeholder="user@example.com"
+            class="input-email"
+          />
+        </a-form-item>
+        <a-form-item>
           <a-button
-            block
             type="primary"
-            :loading="submitting"
-            @click="handleNext"
+            html-type="submit"
+            block
+            :loading="iconLoading"
           >
-            {{ props.pageId < 8 ? 'Next' : 'Submit' }}
+            Send recovery link to email
           </a-button>
-        </div>
-      </a-card>
-    </div>
-  </div>
+        </a-form-item>
+      </a-form>
+      <a-flex justify="center" align="center" gap="small">
+        <a-tooltip title="Back to login" placement="bottom">
+          <a-button shape="circle" size="large" @click="router.push('/login')"
+            ><UndoOutlined
+          /></a-button>
+        </a-tooltip>
+      </a-flex>
+    </a-card>
+  </a-flex>
 </template>
+
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import LogoTitleApp from '@/components/LogoTitleApp.vue'
+import router from '@/router'
+import ThemeToggle from '@/components/ThemeToggle.vue'
+import { UndoOutlined } from '@ant-design/icons-vue'
+import { useAuthStore } from '@/stores/auth'
+import { ref } from 'vue'
 
-const isMobile = ref(false)
-
-const checkIsMobile = () => {
-  isMobile.value = window.innerWidth < 640
+const authStore = useAuthStore()
+const iconLoading = ref(false)
+const form = ref({
+  email: null,
+})
+const rules = {
+  email: [
+    {
+      required: true,
+      message: 'Please input your email',
+      trigger: 'change',
+    },
+    {
+      type: 'email',
+      message: 'Please enter a valid email address',
+      trigger: ['change', 'blur'],
+    },
+  ],
 }
 
-onMounted(() => {
-  checkIsMobile()
-  window.addEventListener('resize', checkIsMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkIsMobile)
-})
+const recoverAccount = async () => {
+  iconLoading.value = true
+  await authStore.forgotPassword(form.value.email)
+  iconLoading.value = false
+}
 </script>
+
+<style scoped>
+.forgot-container {
+  height: 100dvh;
+  background-color: var(--content-bg);
+}
+
+.forgot-card {
+  padding: 5px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.forgot-card .ant-card-body {
+  padding: 0;
+}
+
+.a-button {
+  width: 100%;
+}
+
+.input-email {
+  width: 100%;
+  min-width: 400px;
+}
+</style>

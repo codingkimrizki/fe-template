@@ -2,7 +2,7 @@
   <a-row :gutter="[24, 24]" :wrap="true">
     <BaseWidget
       :height="110"
-      title="Visitor"
+      title="Supplier"
       :value="machineStore.totalMachine"
       :icon="SettingOutlined"
       description="Counted visitor listed on database"

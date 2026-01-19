@@ -60,68 +60,39 @@ export const useAuthStore = defineStore('auth', {
 
     // 🚪 Logout user
     async logout() {
+      console.log('ACCESS TOKEN SAAT LOGOUT:', this.accessToken)
+
       try {
         await api.post('/users/logout', null, {
           headers: {
-            Authorization: `Bearer ${this.accessToken}`, // tambahin "Bearer "
+            Authorization: `Bearer ${this.accessToken}`,
           },
         })
+
+        // bersihin state
         this.$reset()
         localStorage.removeItem('auth')
+
         router.push('/login')
+
         notification.success({
           message: 'Logout Success',
-          description: 'See you again',
+          description: 'See you again 👋',
         })
       } catch (error) {
         console.error('Logout failed:', error)
+
+        // optional UX improvement
+        notification.error({
+          message: 'Logout Failed',
+          description: error.response?.data?.message || 'Something went wrong',
+        })
+
+        // fallback: tetap logout di FE
+        this.$reset()
+        localStorage.removeItem('auth')
+        router.push('/login')
       }
-    },
-
-    // 📧 Kirim email recovery dengan cooldown
-    async requestRecoveryAccount(email) {
-      // Cek apakah masih cooldown
-      if (this.recoveryCooldown > 0) {
-        const minutes = Math.ceil(this.recoveryCooldown / 60)
-        message.warning(
-          `Please wait ${minutes} minute(s) before requesting again.`,
-        )
-        return
-      }
-
-      try {
-        const { status } = await api.post('/auth/forgot-password', { email })
-
-        if (status === 200) {
-          notification.success({
-            message: 'Recovery link sent to your email.',
-            placement: 'topRight',
-          })
-
-          // Set cooldown 2 menit
-          this.setRecoveryCooldown(120)
-        }
-      } catch (error) {
-        console.error('Request recovery account failed:', error)
-        message.error(
-          error.response?.data?.message || 'Failed to send recovery email.',
-        )
-      }
-    },
-
-    // 🕒 Set waktu cooldown
-    setRecoveryCooldown(seconds) {
-      this.recoveryCooldown = seconds
-      this.lastRecoveryTime = Date.now()
-
-      // Hitung mundur setiap detik
-      const timer = setInterval(() => {
-        if (this.recoveryCooldown > 0) {
-          this.recoveryCooldown--
-        } else {
-          clearInterval(timer)
-        }
-      }, 1000)
     },
 
     // 👤 Register new user
@@ -158,34 +129,45 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    //  Recover password
-    async recoverPassword(data) {
+    // 📧 Kirim email recovery dengan cooldown
+    async forgotPassword(email) {
       try {
-        const response = await api.post('/auth/reset-password', data)
-        if (response.status === 200) {
-          notification.success({
-            message: 'Success reset your password',
-            description: 'Wait a seconds you will be redirected to login page',
-            placement: 'topRight',
-            duration: 1.5,
-            icon: h(LoadingOutlined, {
-              style: 'color: #108ee9',
-            }),
-          })
-        }
+        await api.post('/users/forgotPassword', { email })
+
+        notification.success({
+          message: 'Email sent',
+          description: 'Check your email to reset password',
+        })
+      } catch (err) {
+        notification.error({
+          message: 'Failed',
+          description: err.response?.data?.message || 'Email not found',
+        })
+        throw err
+      }
+    },
+
+    //  Recover password
+    async resetPassword({ token, newPassword }) {
+      try {
+        await api.post('/users/reset-password', {
+          token,
+          newPassword,
+        })
+
+        notification.success({
+          message: 'Password updated',
+          description: 'Please login again',
+        })
+
         router.push('/login')
-      } catch (error) {
-        if (error.response.status === 400) {
-          notification.error({
-            message: `Invalid token`,
-            description: `Token already used or expired`,
-          })
-        } else {
-          notification.error({
-            message: `Server Error`,
-          })
-        }
-        console.error('Reset password failed', error)
+      } catch (err) {
+        notification.error({
+          message: 'Reset failed',
+          description:
+            err.response?.data?.message || 'Invalid or expired token',
+        })
+        throw err
       }
     },
   },

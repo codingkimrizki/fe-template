@@ -119,7 +119,7 @@ const route = useRoute()
 // Watch for changes in the menu and update if routes change
 watchEffect(() => {
   console.log('menus.value:', menus.value)
-  console.log('user.role:', authStore.user.role)
+  console.log('user.role:', authStore.user?.role)
 
   if (menus.value && menus.value.length > 0) {
     menuItems.value = menus.value.map(item => ({

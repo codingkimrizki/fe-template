@@ -101,7 +101,7 @@ const rules = {
 
 const updatePassword = async () => {
   iconLoading.value = true
-  await authStore.recoverPassword({
+  await authStore.resetPassword({
     token,
     password: form.value.password,
   })
