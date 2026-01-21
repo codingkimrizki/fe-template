@@ -16,5 +16,5 @@ services:
       - rizki-app-network
 
 networks:
-  app-network:
+  rizki-app-network:
     driver: bridge
