@@ -34,4 +34,9 @@ export default [
     name: 'Finish',
     component: () => import('@/views/survey/ThankYou.vue'),
   },
+  {
+    path: '/qrcode',
+    name: 'qrcode',
+    component: () => import('@/components/QrcodeGenerator.vue'),
+  },
 ]
