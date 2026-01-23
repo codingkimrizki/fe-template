@@ -24,7 +24,7 @@
       </a-button>
 
       <a-button v-else-if="text === 'clear'" type="primary" size="small">
-        CLEAR
+        NO ISSUES
       </a-button>
 
       <span v-else>-</span>
