@@ -1,12 +1,10 @@
 <template>
   <a-dropdown placement="bottomRight" :trigger="['hover']" arrow>
-    <a-badge :count="store.countNotification">
-      <a-button type="dashed" shape="circle">
-        <span class="items-center">
-          <MailOutlined />
-        </span>
-      </a-button>
-    </a-badge>
+    <a-button type="dashed" shape="circle">
+      <span class="items-center">
+        <MailOutlined />
+      </span>
+    </a-button>
     <template #overlay>
       <a-menu class="notif-menu">
         <span class="medium mb-small bold" style="padding: 8px 10px"
@@ -24,12 +22,9 @@
 
 <script setup>
 import { MailOutlined } from '@ant-design/icons-vue'
-import { useMaintenanceNotifyStore } from '@/stores/maintenanceNotify'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
-const store = useMaintenanceNotifyStore()
 </script>
 
 <style scoped>
