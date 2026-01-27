@@ -32,7 +32,7 @@
     <template #action="{ record }">
       <a-button
         type="primary"
-        :disabled="record.roleName == 'user'"
+        :disabled="record.roleName == 'admin'"
         size="small"
         @click="handleAction('update', record)"
       >

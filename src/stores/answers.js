@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import api from '@/axios/interceptor'
 import { message } from 'ant-design-vue'
+import { useAuthStore } from '@/stores/auth'
 
 export const useAnswersStore = defineStore('answers', {
   state: () => ({
@@ -23,7 +24,7 @@ export const useAnswersStore = defineStore('answers', {
     getTotalIpAddress: state => state.totalIpAddress,
     getTotalMajor: state => state.totalMajor,
 
-    // 🔔 badge = unread only
+    //badge = unread only
     countNotification: state =>
       state.majorNotifications.filter(n => !n.read).length,
   },
@@ -39,14 +40,18 @@ export const useAnswersStore = defineStore('answers', {
           localStorage.getItem('lastTotalMajor') || 0,
         )
 
-        // 🚨 DETECT MAJOR BARU
+        //DETECT MAJOR BARU
         if (newTotalMajor > lastTotalMajor) {
           const diff = newTotalMajor - lastTotalMajor
+
+          const authStore = useAuthStore()
+          const userName = authStore.user?.name || 'Unknown User'
 
           for (let i = 0; i < diff; i++) {
             this.majorNotifications.push({
               id: Date.now() + i,
               message: 'a new issue major was detected',
+              userName,
               read: false,
               createdAt: new Date().toISOString(),
             })
@@ -55,13 +60,13 @@ export const useAnswersStore = defineStore('answers', {
           message.warning(`${diff} new major issues🚨`)
         }
 
-        // update data utama
+        //update data utama
         this.answers = res.data.data || []
         this.totalDevice = this.answers.length
         this.totalIpAddress = res.data.totalIpAddress || 0
         this.totalMajor = newTotalMajor
 
-        // persist
+        //persist
         localStorage.setItem('lastTotalMajor', newTotalMajor)
         localStorage.setItem(
           'majorNotifications',
@@ -78,18 +83,18 @@ export const useAnswersStore = defineStore('answers', {
       this.questions = res.data.data || []
     },
 
-    // 🧾 drawer toggle
+    //drawer toggle
     toggleDrawer(mode = 'major') {
       this.drawer.open = !this.drawer.open
       this.drawer.mode = mode
 
-      // 👇 UX: buka drawer = notif dianggap kebaca
+      //UX: buka drawer = notif dianggap kebaca
       if (this.drawer.open && mode === 'major') {
         this.markAllMajorAsRead()
       }
     },
 
-    // 🧼 mark read
+    //mark read
     markAllMajorAsRead() {
       this.majorNotifications.forEach(n => {
         n.read = true

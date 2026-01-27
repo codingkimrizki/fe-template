@@ -34,109 +34,82 @@
       <a-divider />
 
       <a-space :direction="isMobile ? 'vertical' : 'horizontal'" class="w-full">
-        <a-button block @click="handleDecline"> Batal </a-button>
-        <a-button type="primary" block @click="handleAccept">
-          Saya Setuju
-        </a-button>
+        <a-button block @click="handleDecline">Batal</a-button>
+        <a-button type="primary" block @click="handleAccept"
+          >Saya Setuju</a-button
+        >
       </a-space>
     </a-space>
   </a-modal>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import axios from 'axios'
+import { ref, onMounted, onUnmounted, defineExpose } from 'vue'
+import api from '@/axios/interceptor'
 
 const emit = defineEmits(['close', 'accepted'])
+const emitClose = () => emit('close')
 
-const emitClose = () => {
-  emit('close')
-}
 const isMobile = ref(false)
-const checkIsMobile = () => {
-  isMobile.value = window.innerWidth < 640
-}
+const checkIsMobile = () => (isMobile.value = window.innerWidth < 640)
 
 // geolocation
-const latitude = ref(null)
-const longitude = ref(null)
 const locationSource = ref(null)
-const city = ref('')
-const region = ref('')
-const country = ref('')
+const city = ref('') // optional
+const region = ref('') // optional
 
+// helper: ambil GPS sebagai Promise
+const getGPS = () => {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) return reject('No GPS support')
+
+    navigator.geolocation.getCurrentPosition(
+      position => resolve(position),
+      err => reject(err),
+    )
+  })
+}
+
+// submit ke backend
+const submitLocation = async () => {
+  try {
+    await api.post('/userlocation/submit', {
+      city: city.value,
+      region: region.value,
+      location_source: locationSource.value,
+    })
+    console.log('Location submitted successfully!')
+  } catch (err) {
+    console.error('Failed to submit location', err)
+  }
+}
+
+// handle tombol Setuju
 const handleAccept = async () => {
-  // <--- tambahin async di sini
   localStorage.setItem('cookie_consent', 'accepted')
   emit('accepted')
 
-  // coba ambil GPS
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async position => {
-        // <--- ini tetap async, karena ada await di sini
-        latitude.value = position.coords.latitude
-        longitude.value = position.coords.longitude
-        locationSource.value = 'gps'
-
-        // kirim ke backend
-        await axios.post('/submit-location', {
-          latitude: latitude.value,
-          longitude: longitude.value,
-          location_source: locationSource.value,
-        })
-        console.log('Location submitted with GPS!')
-      },
-      async () => {
-        // fallback Geo IP
-        locationSource.value = 'ip'
-        const ipRes = await axios.post('http://localhost:5000/geo-ip', {
-          ip: null,
-        })
-        latitude.value = ipRes.data.latitude
-        longitude.value = ipRes.data.longitude
-        city.value = ipRes.data.city
-        region.value = ipRes.data.region
-        country.value = ipRes.data.country
-
-        await axios.post('/submit-location', {
-          latitude: latitude.value,
-          longitude: longitude.value,
-          city: city.value,
-          region: region.value,
-          country: country.value,
-          location_source: locationSource.value,
-        })
-        console.log('Location submitted with Geo IP fallback!')
-      },
-    )
-  } else {
-    console.log('Browser tidak support GPS, fallback ke Geo IP')
+  try {
+    await getGPS()
+    locationSource.value = 'gps'
+    console.log('GPS available')
+  } catch {
     locationSource.value = 'ip'
-    const ipRes = await axios.post('http://localhost:5000/geo-ip', { ip: null })
-    latitude.value = ipRes.data.latitude
-    longitude.value = ipRes.data.longitude
-    city.value = ipRes.data.city
-    region.value = ipRes.data.region
-    country.value = ipRes.data.country
-
-    await axios.post('/submit-location', {
-      latitude: latitude.value,
-      longitude: longitude.value,
-      city: city.value,
-      region: region.value,
-      country: country.value,
-      location_source: locationSource.value,
-    })
-    console.log('Location submitted with Geo IP fallback!')
+    console.log('Fallback to IP')
   }
 
+  await submitLocation()
   emitClose()
 }
 
-const handleDecline = () => {
-  emit('close')
-}
+// handle tombol Batal
+const handleDecline = () => emit('close')
+
+// expose ke template supaya ESLint nggak complain
+defineExpose({
+  handleAccept,
+  handleDecline,
+})
 
 onMounted(() => {
   checkIsMobile()

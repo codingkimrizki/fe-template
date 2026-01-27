@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    // 🔑 Login user
+    // Login user
     async login(email, password) {
       try {
         const { data, status } = await api.post('/users/login', {
@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 🚪 Logout user
+    //Logout user
     async logout() {
       console.log('ACCESS TOKEN SAAT LOGOUT:', this.accessToken)
 
@@ -95,7 +95,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 👤 Register new user
+    // Register new user
     async register(data) {
       try {
         // eslint-disable-next-line no-unused-vars
@@ -129,7 +129,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // 📧 Kirim email recovery dengan cooldown
+    // Kirim email recovery dengan cooldown
     async forgotPassword(email) {
       try {
         await api.post('/users/forgotPassword', { email })

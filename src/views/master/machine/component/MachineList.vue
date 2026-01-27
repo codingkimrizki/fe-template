@@ -81,24 +81,28 @@ const columns = [
     dataIndex: 'no',
     key: 'no',
     width: 80,
+    sorter: true,
   },
   {
     title: 'Device IP Address',
     dataIndex: 'ipAddress',
     key: 'ipAddress',
     width: 200,
+    sorter: true,
   },
   {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
     width: 120,
+    sorter: true,
   },
   {
     title: 'Time',
     dataIndex: 'time',
     key: 'time',
     width: 120,
+    sorter: true,
   },
   {
     title: 'Status',
